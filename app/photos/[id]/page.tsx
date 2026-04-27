@@ -55,6 +55,10 @@ const photos: Record<
   },
 };
 
+export function generateStaticParams() {
+  return Object.keys(photos).map((id) => ({ id }));
+}
+
 export default async function PhotoPage({
   params,
 }: {
