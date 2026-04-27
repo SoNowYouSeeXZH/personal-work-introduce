@@ -181,7 +181,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-y border-white/10 bg-white/[0.03] px-6 py-8 lg:px-8">
+      <section className="border-y border-white/10 bg-white/[0.03] px-6 py-8 mt-4 lg:px-8">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 md:grid-cols-4">
           {highlights.map((item, index) => (
             <ScrollReveal key={item.label} delay={index * 0.06}>
