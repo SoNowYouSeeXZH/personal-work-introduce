@@ -6,12 +6,12 @@ const isUserOrOrgPage = repositoryName.endsWith(".github.io");
 const basePath = isGitHubPages && !isUserOrOrgPage ? `/${repositoryName}` : undefined;
 
 const nextConfig: NextConfig = {
-  output: "export",
-  trailingSlash: true,
+  ...(isGitHubPages ? { output: "export" as const } : {}),
+  trailingSlash: isGitHubPages,
   basePath,
   assetPrefix: basePath,
   images: {
-    unoptimized: true,
+    unoptimized: isGitHubPages,
     remotePatterns: [
       {
         protocol: "https",
