@@ -15,7 +15,6 @@ export function UploadPetPhotoForm() {
   return (
     <form
       action={formAction}
-      encType="multipart/form-data"
       className="grid gap-4 rounded-lg border border-rose-100 bg-white/82 p-4 shadow-[0_18px_60px_rgba(251,113,133,0.14)] backdrop-blur md:grid-cols-[1fr_1fr] md:p-5"
     >
       <label className="grid gap-2 text-sm font-semibold text-slate-700">
@@ -29,10 +28,10 @@ export function UploadPetPhotoForm() {
       </label>
 
       <label className="grid gap-2 text-sm font-semibold text-slate-700">
-        猫咪名字
+        猫咪名字（默认福仔）
         <input
           name="petName"
-          placeholder="例如：年糕"
+          placeholder="例如：福仔"
           className="h-11 rounded-md border border-rose-100 bg-white px-3 text-sm outline-none transition focus:border-rose-300 focus:ring-4 focus:ring-rose-100"
         />
       </label>
@@ -82,7 +81,7 @@ export function UploadPetPhotoForm() {
                 : "text-slate-500"
           }`}
         >
-          {state.message || "支持 JPG、PNG、WebP、GIF，单张不超过 4MB。"}
+          {state.message || "支持常见图片格式，单张不超过 4MB。"}
         </p>
         <button
           type="submit"

@@ -23,8 +23,8 @@ const samplePhotos: PetPhoto[] = [
   {
     id: "sample-1",
     title: "午后晒太阳",
-    pet_name: "年糕",
-    note: "窗边那块阳光每天准时变成专属小床。",
+    pet_name: "福仔",
+    note: "窗边那块阳光每天准时变成福仔的专属小床。",
     image_url:
       "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1200&q=85",
     uploaded_at: "2026-04-30T06:20:00.000Z",
@@ -33,8 +33,8 @@ const samplePhotos: PetPhoto[] = [
   {
     id: "sample-2",
     title: "认真巡逻",
-    pet_name: "豆包",
-    note: "厨房、客厅、纸箱，全部检查完毕。",
+    pet_name: "福仔",
+    note: "厨房、客厅、纸箱，全部被福仔认真检查完毕。",
     image_url:
       "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=1200&q=85",
     uploaded_at: "2026-04-29T13:08:00.000Z",
@@ -43,7 +43,7 @@ const samplePhotos: PetPhoto[] = [
   {
     id: "sample-3",
     title: "被窝占领计划",
-    pet_name: "小满",
+    pet_name: "福仔",
     note: "人类只拥有床沿三厘米使用权。",
     image_url:
       "https://images.unsplash.com/photo-1533743983669-94fa5c4338ec?w=1200&q=85",

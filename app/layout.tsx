@@ -3,8 +3,8 @@ import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "猫咪日常相册",
-  description: "一个用于记录猫咪日常照片，并按上传日期分类展示的清新个人网站。",
+  title: "福仔日常相册",
+  description: "一个用于记录福仔日常照片，并按上传日期分类展示的清新个人网站。",
 };
 
 function Navbar() {
@@ -13,9 +13,9 @@ function Navbar() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 md:px-8">
         <Link href="/" className="flex items-center gap-3">
           <span className="flex h-9 w-9 items-center justify-center rounded-md bg-slate-950 text-sm font-black text-white">
-            M
+            福
           </span>
-          <span className="text-sm font-black uppercase text-slate-950">Miao Diary</span>
+          <span className="text-sm font-black text-slate-950">福仔日记</span>
         </Link>
 
         <div className="flex items-center gap-2">
@@ -41,7 +41,7 @@ function Footer() {
   return (
     <footer className="border-t border-emerald-100 bg-[#fffdf8]">
       <div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-8 text-sm text-slate-500 md:flex-row md:items-center md:justify-between md:px-8">
-        <p>© 2026 Miao Diary · 猫咪日常记录</p>
+        <p>© 2026 福仔日记 · 猫咪日常记录</p>
         <div className="flex gap-4">
           <Link className="font-semibold transition hover:text-rose-600" href="/#upload">
             上传照片

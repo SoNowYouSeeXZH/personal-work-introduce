@@ -50,7 +50,7 @@ The Supabase MCP migration `create_pet_photos_table` created this table:
 public.pet_photos (
   id uuid primary key default gen_random_uuid(),
   title text not null,
-  pet_name text not null default '猫咪',
+  pet_name text not null default '福仔',
   note text,
   image_url text not null,
   uploaded_at timestamptz not null default now(),
@@ -63,6 +63,10 @@ Indexes:
 
 - `pet_photos_uploaded_at_idx` on `uploaded_at desc`
 - `pet_photos_uploaded_on_idx` on `uploaded_on desc`
+
+Follow-up migration:
+
+- `set_pet_photos_default_pet_name_fuzai` changed the database default pet name to `福仔` and updated old `猫咪` defaults to `福仔`.
 
 RLS is enabled. No anonymous policies are created. The app expects server-side credentials for reads and writes.
 
@@ -90,8 +94,10 @@ app/
 - Route `params` are Promise objects: `params: Promise<{ id: string }>`.
 - Mutations go through Server Actions in `app/actions.ts`.
 - Supabase access is centralized in `app/lib/pet-photos.ts`; do not duplicate REST calls in pages.
+- If the upload form leaves the pet name blank, the app and Supabase table default it to `福仔`.
 - Uploaded images are currently stored as data URLs in `pet_photos.image_url` with a 4MB file limit. This avoids creating a public Storage bucket. If the app later needs larger files or private media delivery, migrate to Supabase Storage with explicit authentication and signed URLs.
 - Keep the visual style cute, clean, and fresh: warm off-white background, rose accents, emerald/mint support colors, compact rounded corners, and photo-first layouts.
+- The current homepage includes CSS-drawn cartoon elements for 福仔 in `app/globals.css` and `app/page.tsx`; keep future decorative work lightweight and avoid adding a new animation/image dependency unless it solves a real need.
 
 ## Netlify Deployment Notes
 
@@ -124,3 +130,14 @@ Successful deployment:
 Notes:
 
 - Before broad sharing, add a simple upload password/auth gate; the current upload Server Action is public.
+
+2026-05-01 update:
+
+- Changed blank pet-name defaults from `猫咪` to `福仔` in the app and Supabase schema.
+- Replaced visible English UI labels with Chinese labels.
+- Added lightweight CSS cartoon 福仔 and paw-print decoration.
+- Removed manual `encType` from the Server Action form because React sets it automatically.
+- Production deploy completed:
+  - Deploy URL: `https://69f46c88827d1610c90498f6--miao-diary-xuzihan.netlify.app`
+  - Production URL: `https://miao-diary-xuzihan.netlify.app`
+  - Build logs: `https://app.netlify.com/projects/miao-diary-xuzihan/deploys/69f46c88827d1610c90498f6`

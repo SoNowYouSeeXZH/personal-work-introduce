@@ -48,6 +48,29 @@ function PhotoTile({ photo, priority }: { photo: PetPhoto; priority?: boolean })
   );
 }
 
+function CartoonFuzai() {
+  return (
+    <div className="fuzai-card" aria-label="福仔卡通头像">
+      <div className="fuzai-face" aria-hidden="true">
+        <span className="fuzai-ear fuzai-ear-left" />
+        <span className="fuzai-ear fuzai-ear-right" />
+        <span className="fuzai-eye fuzai-eye-left" />
+        <span className="fuzai-eye fuzai-eye-right" />
+        <span className="fuzai-nose" />
+        <span className="fuzai-mouth" />
+        <span className="fuzai-whisker fuzai-whisker-left-one" />
+        <span className="fuzai-whisker fuzai-whisker-left-two" />
+        <span className="fuzai-whisker fuzai-whisker-right-one" />
+        <span className="fuzai-whisker fuzai-whisker-right-two" />
+      </div>
+      <div>
+        <p className="text-xs font-black text-rose-500">今日主角</p>
+        <p className="mt-1 text-2xl font-black text-slate-950">福仔</p>
+      </div>
+    </div>
+  );
+}
+
 export default async function Home() {
   const photos = await getPetPhotos();
   const groupedPhotos = groupPhotosByUploadDay(photos);
@@ -59,12 +82,12 @@ export default async function Home() {
       <section className="border-b border-emerald-100 bg-[linear-gradient(135deg,#fff7ed_0%,#ecfeff_52%,#f0fdf4_100%)] px-5 pb-12 pt-28 md:px-8">
         <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-end">
           <div>
-            <p className="text-sm font-black uppercase text-rose-500">Cat Daily Album</p>
+            <p className="text-sm font-black text-rose-500">福仔日常相册</p>
             <h1 className="mt-4 max-w-3xl text-5xl font-black leading-[1.02] text-slate-950 md:text-7xl">
-              把猫咪每天的小瞬间收好
+              把福仔每天的小瞬间收好
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
-              上传照片、写下名字和当天的小故事，网站会按照上传日期自动整理成清爽的猫咪日常时间线。
+              上传照片、写下当天的小故事，网站会按照上传日期自动整理成清爽的福仔日常时间线。
             </p>
             <div className="mt-7 grid max-w-xl grid-cols-3 gap-3">
               <div className="rounded-lg border border-white bg-white/70 p-3">
@@ -83,6 +106,7 @@ export default async function Home() {
           </div>
 
           <div className="grid gap-4">
+            <CartoonFuzai />
             {latestPhoto ? (
               <div className="grid overflow-hidden rounded-lg border border-white bg-white shadow-[0_24px_70px_rgba(15,23,42,0.12)] md:grid-cols-[0.95fr_1fr]">
                 <div className="relative min-h-72 bg-emerald-50">
@@ -98,7 +122,7 @@ export default async function Home() {
                 </div>
                 <div className="flex flex-col justify-between gap-8 p-5">
                   <div>
-                    <p className="text-xs font-black uppercase text-emerald-600">Latest memory</p>
+                    <p className="text-xs font-black text-emerald-600">最新记录</p>
                     <h2 className="mt-3 text-3xl font-black text-slate-950">{latestPhoto.title}</h2>
                     <p className="mt-3 text-sm font-bold text-rose-600">{latestPhoto.pet_name}</p>
                     {latestPhoto.note ? (
@@ -129,8 +153,13 @@ export default async function Home() {
       <section id="upload" className="px-5 py-10 md:px-8">
         <div className="mx-auto grid max-w-6xl gap-5 lg:grid-cols-[320px_1fr] lg:items-start">
           <div>
-            <p className="text-sm font-black uppercase text-emerald-600">Upload</p>
-            <h2 className="mt-3 text-3xl font-black text-slate-950">记录今天的猫咪</h2>
+            <div className="paw-trail mb-4" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </div>
+            <p className="text-sm font-black text-emerald-600">上传记录</p>
+            <h2 className="mt-3 text-3xl font-black text-slate-950">记录今天的福仔</h2>
             <p className="mt-4 text-sm leading-7 text-slate-500">
               表单提交后会重新刷新首页时间线，最新照片会出现在最上方。
             </p>
@@ -143,7 +172,7 @@ export default async function Home() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-8 flex flex-col justify-between gap-3 md:flex-row md:items-end">
             <div>
-              <p className="text-sm font-black uppercase text-rose-500">Timeline</p>
+              <p className="text-sm font-black text-rose-500">时间线</p>
               <h2 className="mt-3 text-3xl font-black text-slate-950">按上传时间整理</h2>
             </div>
             <p className="text-sm font-semibold text-slate-500">最新的日常会排在前面</p>

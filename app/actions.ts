@@ -28,7 +28,7 @@ export async function uploadPetPhoto(
   }
 
   const title = readTextField(formData, "title");
-  const petName = readTextField(formData, "petName") || "猫咪";
+  const petName = readTextField(formData, "petName") || "福仔";
   const note = readTextField(formData, "note");
   const file = formData.get("photo");
 

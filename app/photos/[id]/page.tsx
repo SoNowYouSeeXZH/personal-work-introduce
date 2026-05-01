@@ -42,7 +42,7 @@ export default async function PhotoPage({
 
           <div className="grid gap-8 p-5 md:grid-cols-[1fr_280px] md:p-7">
             <div>
-              <p className="text-sm font-black uppercase text-emerald-600">Cat Memory</p>
+              <p className="text-sm font-black text-emerald-600">福仔的照片</p>
               <h1 className="mt-3 text-4xl font-black text-slate-950 md:text-5xl">{photo.title}</h1>
               {photo.note ? <p className="mt-5 text-base leading-8 text-slate-600">{photo.note}</p> : null}
             </div>
