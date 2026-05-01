@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { EditPetPhotoForm } from "@/app/components/pet/EditPetPhotoForm";
 import { formatDateTimeLabel, getPetPhoto } from "@/app/lib/pet-photos";
 
 export const dynamic = "force-dynamic";
@@ -18,17 +19,17 @@ export default async function PhotoPage({
   }
 
   return (
-    <div className="min-h-screen bg-[#fffdf8] px-5 pb-12 pt-28 text-slate-900 md:px-8">
+    <div className="xhs-shell min-h-screen px-5 pb-12 pt-28 text-slate-900 md:px-8">
       <div className="mx-auto max-w-5xl">
         <Link
           href="/#gallery"
-          className="inline-flex h-10 items-center rounded-md border border-emerald-100 bg-white px-4 text-sm font-bold text-slate-600 transition hover:-translate-y-0.5 hover:border-rose-200 hover:text-rose-600"
+          className="inline-flex h-10 items-center rounded-md border border-[#F8D5C4] bg-white px-4 text-sm font-bold text-slate-600 transition hover:-translate-y-0.5 hover:border-[#E8655A] hover:text-rose-600"
         >
           返回相册
         </Link>
 
-        <article className="mt-6 overflow-hidden rounded-lg border border-emerald-100 bg-white shadow-[0_24px_70px_rgba(15,23,42,0.12)]">
-          <div className="relative aspect-[4/3] bg-emerald-50 md:aspect-[16/10]">
+        <article className="xhs-feature-card mt-6 overflow-hidden rounded-lg border bg-white">
+          <div className="xhs-polaroid-frame relative aspect-[4/3] bg-emerald-50 md:aspect-[16/10]">
             <Image
               src={photo.image_url}
               alt={photo.title}
@@ -42,12 +43,12 @@ export default async function PhotoPage({
 
           <div className="grid gap-8 p-5 md:grid-cols-[1fr_280px] md:p-7">
             <div>
-              <p className="text-sm font-black text-emerald-600">福仔的照片</p>
+              <p className="xhs-pill w-fit bg-[#B5E5CF]/80 text-sm font-black text-emerald-800">福仔的照片</p>
               <h1 className="mt-3 text-4xl font-black text-slate-950 md:text-5xl">{photo.title}</h1>
               {photo.note ? <p className="mt-5 text-base leading-8 text-slate-600">{photo.note}</p> : null}
             </div>
 
-            <aside className="grid gap-4 rounded-lg bg-rose-50 p-4">
+            <aside className="grid gap-4 rounded-lg border border-[#F8D5C4] bg-[#FFF5F7] p-4 shadow-[6px_6px_0_rgba(248,213,196,0.65)]">
               <div>
                 <p className="text-xs font-black uppercase text-rose-500">猫咪</p>
                 <p className="mt-1 text-lg font-black text-slate-950">{photo.pet_name}</p>
@@ -64,6 +65,8 @@ export default async function PhotoPage({
               </div>
             </aside>
           </div>
+
+          <EditPetPhotoForm id={photo.id} title={photo.title} note={photo.note} />
         </article>
       </div>
     </div>

@@ -10,6 +10,8 @@ export type PetPhoto = {
 
 export type NewPetPhoto = Omit<PetPhoto, "id">;
 
+export type PetPhotoUpdates = Pick<PetPhoto, "title" | "note">;
+
 export const isSupabaseConfigured = Boolean(
   process.env.NEXT_PUBLIC_SUPABASE_URL &&
     (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
@@ -120,6 +122,25 @@ export async function insertPetPhoto(photo: NewPetPhoto): Promise<PetPhoto> {
 
   if (!rows[0]) {
     throw new Error("Supabase did not return the inserted photo.");
+  }
+
+  return rows[0];
+}
+
+export async function updatePetPhoto(id: string, updates: PetPhotoUpdates): Promise<PetPhoto> {
+  const rows = await supabaseRequest<PetPhoto[]>(
+    `/rest/v1/pet_photos?id=eq.${encodeURIComponent(id)}`,
+    {
+      method: "PATCH",
+      headers: {
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify(updates),
+    }
+  );
+
+  if (!rows[0]) {
+    throw new Error("Supabase did not return the updated photo.");
   }
 
   return rows[0];

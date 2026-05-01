@@ -16,7 +16,7 @@ function PhotoTile({ photo, priority }: { photo: PetPhoto; priority?: boolean })
   return (
     <Link
       href={`/photos/${photo.id}`}
-      className="group grid overflow-hidden rounded-lg border border-emerald-100 bg-white shadow-sm transition hover:-translate-y-1 hover:border-rose-200 hover:shadow-[0_18px_48px_rgba(15,23,42,0.12)]"
+      className="xhs-photo-card group relative grid overflow-hidden rounded-lg border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-[0_18px_48px_rgba(232,101,90,0.18)]"
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-emerald-50">
         <Image
@@ -35,7 +35,7 @@ function PhotoTile({ photo, priority }: { photo: PetPhoto; priority?: boolean })
             <h3 className="text-lg font-black text-slate-900">{photo.title}</h3>
             <p className="mt-1 text-sm font-semibold text-rose-600">{photo.pet_name}</p>
           </div>
-          <span className="rounded-md bg-emerald-50 px-2 py-1 text-xs font-bold text-emerald-700">
+          <span className="xhs-pill bg-[#B5E5CF]/75 text-xs font-bold text-emerald-800">
             日常
           </span>
         </div>
@@ -51,6 +51,8 @@ function PhotoTile({ photo, priority }: { photo: PetPhoto; priority?: boolean })
 function CartoonFuzai() {
   return (
     <div className="fuzai-card" aria-label="福仔卡通头像">
+      <span className="xhs-sparkle xhs-sparkle-one" aria-hidden="true" />
+      <span className="xhs-sparkle xhs-sparkle-two" aria-hidden="true" />
       <div className="fuzai-face" aria-hidden="true">
         <span className="fuzai-ear fuzai-ear-left" />
         <span className="fuzai-ear fuzai-ear-right" />
@@ -64,12 +66,14 @@ function CartoonFuzai() {
         <span className="fuzai-whisker fuzai-whisker-right-two" />
       </div>
       <div>
-        <p className="text-xs font-black text-rose-500">今日主角</p>
+        <p className="xhs-pill w-fit bg-[#F8D5C4] text-xs font-black text-rose-700">今日主角</p>
         <p className="mt-1 text-2xl font-black text-slate-950">福仔</p>
       </div>
     </div>
   );
 }
+
+const diaryTags = ["福仔专属", "每日一拍", "按日期归档"];
 
 export default async function Home() {
   const photos = await getPetPhotos();
@@ -78,27 +82,34 @@ export default async function Home() {
   const latestPhoto = photos[0];
 
   return (
-    <div className="min-h-screen bg-[#fffdf8] text-slate-900">
-      <section className="border-b border-emerald-100 bg-[linear-gradient(135deg,#fff7ed_0%,#ecfeff_52%,#f0fdf4_100%)] px-5 pb-12 pt-28 md:px-8">
+    <div className="xhs-shell min-h-screen text-slate-900">
+      <section className="xhs-hero border-b border-[#F8D5C4] px-5 pb-12 pt-28 md:px-8">
         <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-end">
           <div>
-            <p className="text-sm font-black text-rose-500">福仔日常相册</p>
+            <p className="xhs-section-label">福仔日常相册</p>
             <h1 className="mt-4 max-w-3xl text-5xl font-black leading-[1.02] text-slate-950 md:text-7xl">
-              把福仔每天的小瞬间收好
+              把<span className="xhs-highlight">福仔</span>每天的小瞬间收好
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
               上传照片、写下当天的小故事，网站会按照上传日期自动整理成清爽的福仔日常时间线。
             </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {diaryTags.map((tag) => (
+                <span key={tag} className="xhs-pill bg-white/85 text-sm font-bold text-slate-700">
+                  {tag}
+                </span>
+              ))}
+            </div>
             <div className="mt-7 grid max-w-xl grid-cols-3 gap-3">
-              <div className="rounded-lg border border-white bg-white/70 p-3">
+              <div className="xhs-stat-card bg-[#A8D8EA]/55">
                 <p className="text-2xl font-black text-slate-950">{photos.length}</p>
                 <p className="mt-1 text-xs font-bold text-slate-500">张照片</p>
               </div>
-              <div className="rounded-lg border border-white bg-white/70 p-3">
+              <div className="xhs-stat-card bg-[#D5C6E0]/55">
                 <p className="text-2xl font-black text-slate-950">{totalDays}</p>
                 <p className="mt-1 text-xs font-bold text-slate-500">个日期</p>
               </div>
-              <div className="rounded-lg border border-white bg-white/70 p-3">
+              <div className="xhs-stat-card bg-[#B5E5CF]/55">
                 <p className="text-2xl font-black text-slate-950">4MB</p>
                 <p className="mt-1 text-xs font-bold text-slate-500">单图上限</p>
               </div>
@@ -108,8 +119,8 @@ export default async function Home() {
           <div className="grid gap-4">
             <CartoonFuzai />
             {latestPhoto ? (
-              <div className="grid overflow-hidden rounded-lg border border-white bg-white shadow-[0_24px_70px_rgba(15,23,42,0.12)] md:grid-cols-[0.95fr_1fr]">
-                <div className="relative min-h-72 bg-emerald-50">
+              <div className="xhs-feature-card grid overflow-hidden rounded-lg border bg-white md:grid-cols-[0.95fr_1fr]">
+                <div className="xhs-polaroid-frame relative min-h-72 bg-emerald-50">
                   <Image
                     src={latestPhoto.image_url}
                     alt={latestPhoto.title}
@@ -122,7 +133,7 @@ export default async function Home() {
                 </div>
                 <div className="flex flex-col justify-between gap-8 p-5">
                   <div>
-                    <p className="text-xs font-black text-emerald-600">最新记录</p>
+                    <p className="xhs-pill w-fit bg-[#B5E5CF]/80 text-xs font-black text-emerald-800">最新记录</p>
                     <h2 className="mt-3 text-3xl font-black text-slate-950">{latestPhoto.title}</h2>
                     <p className="mt-3 text-sm font-bold text-rose-600">{latestPhoto.pet_name}</p>
                     {latestPhoto.note ? (
@@ -131,7 +142,7 @@ export default async function Home() {
                   </div>
                   <Link
                     href={`/photos/${latestPhoto.id}`}
-                    className="inline-flex h-10 w-fit items-center rounded-md bg-rose-500 px-4 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-slate-900"
+                    className="xhs-button inline-flex h-10 w-fit items-center rounded-md px-4 text-sm font-bold text-white transition hover:-translate-y-0.5"
                   >
                     查看照片
                   </Link>
@@ -158,7 +169,7 @@ export default async function Home() {
               <span />
               <span />
             </div>
-            <p className="text-sm font-black text-emerald-600">上传记录</p>
+            <p className="xhs-section-label">上传记录</p>
             <h2 className="mt-3 text-3xl font-black text-slate-950">记录今天的福仔</h2>
             <p className="mt-4 text-sm leading-7 text-slate-500">
               表单提交后会重新刷新首页时间线，最新照片会出现在最上方。
@@ -168,14 +179,14 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="gallery" className="border-t border-emerald-100 bg-white px-5 py-12 md:px-8">
+      <section id="gallery" className="border-t border-[#F8D5C4] bg-white/70 px-5 py-12 md:px-8">
         <div className="mx-auto max-w-6xl">
           <div className="mb-8 flex flex-col justify-between gap-3 md:flex-row md:items-end">
             <div>
-              <p className="text-sm font-black text-rose-500">时间线</p>
+              <p className="xhs-section-label">时间线</p>
               <h2 className="mt-3 text-3xl font-black text-slate-950">按上传时间整理</h2>
             </div>
-            <p className="text-sm font-semibold text-slate-500">最新的日常会排在前面</p>
+            <p className="xhs-pill w-fit bg-[#F8D5C4]/80 text-sm font-semibold text-slate-600">最新的日常会排在前面</p>
           </div>
 
           <div className="grid gap-10">
@@ -183,7 +194,7 @@ export default async function Home() {
               <section key={group.date} className="grid gap-4">
                 <div className="flex items-center gap-3">
                   <time
-                    className="rounded-md bg-emerald-100 px-3 py-2 text-sm font-black text-emerald-800"
+                    className="xhs-date-label text-sm font-black text-emerald-900"
                     dateTime={group.date}
                   >
                     {formatDateLabel(group.date)}

@@ -27,6 +27,7 @@ This is a personal pet diary site for recording daily cat photos.
 
 - The homepage presents a cute, fresh cat album experience.
 - Users can upload a cat photo with a title, pet name, and note.
+- Users can edit an uploaded photo's title and note from the photo detail page.
 - Photos are saved to Supabase and displayed by upload date, newest first.
 - The photo detail page is available at `/photos/[id]`.
 - If Supabase environment variables are missing, the app shows sample photos and the upload action returns a setup message.
@@ -82,6 +83,7 @@ app/
 │   └── pet-photos.ts                   # Supabase REST helper, types, date grouping
 ├── components/
 │   └── pet/
+│       ├── EditPetPhotoForm.tsx        # Client form for editing title and note
 │       └── UploadPetPhotoForm.tsx      # Client form using useActionState
 └── photos/
     └── [id]/
@@ -94,10 +96,11 @@ app/
 - Route `params` are Promise objects: `params: Promise<{ id: string }>`.
 - Mutations go through Server Actions in `app/actions.ts`.
 - Supabase access is centralized in `app/lib/pet-photos.ts`; do not duplicate REST calls in pages.
+- Editing existing photos updates only `title` and `note`; it does not change the image, pet name, or upload timestamp.
 - If the upload form leaves the pet name blank, the app and Supabase table default it to `福仔`.
 - Uploaded images are currently stored as data URLs in `pet_photos.image_url` with a 4MB file limit. This avoids creating a public Storage bucket. If the app later needs larger files or private media delivery, migrate to Supabase Storage with explicit authentication and signed URLs.
-- Keep the visual style cute, clean, and fresh: warm off-white background, rose accents, emerald/mint support colors, compact rounded corners, and photo-first layouts.
-- The current homepage includes CSS-drawn cartoon elements for 福仔 in `app/globals.css` and `app/page.tsx`; keep future decorative work lightweight and avoid adding a new animation/image dependency unless it solves a real need.
+- Keep the visual style cute, clean, and fresh with a Xiaohongshu image-card flavor: macaron cream background, peach/blue/lavender/mint blocks, coral highlights, sticker labels, tape-corner frames, and photo-first layouts.
+- The current homepage includes CSS-drawn cartoon and image-card elements for 福仔 in `app/globals.css` and `app/page.tsx`; keep future decorative work lightweight and avoid adding a new animation/image dependency unless it solves a real need.
 
 ## Netlify Deployment Notes
 
@@ -141,3 +144,15 @@ Notes:
   - Deploy URL: `https://69f46c88827d1610c90498f6--miao-diary-xuzihan.netlify.app`
   - Production URL: `https://miao-diary-xuzihan.netlify.app`
   - Build logs: `https://app.netlify.com/projects/miao-diary-xuzihan/deploys/69f46c88827d1610c90498f6`
+
+2026-05-01 visual update:
+
+- Applied `baoyu-xhs-images` style guidance to the web UI, using the `cute-share` direction and `macaron` palette.
+- Added reusable `xhs-*` CSS utilities in `app/globals.css` for pastel paper background, sticker labels, tape-corner cards, polaroid-style photo frames, and coral buttons.
+- Updated homepage, upload form, navigation, and detail page styling without changing Supabase data flow or upload behavior.
+
+2026-05-01 edit update:
+
+- Added editing for uploaded photo `title` and `note` on `/photos/[id]`.
+- Added `EditPetPhotoForm` and `editPetPhoto` Server Action.
+- Added Supabase REST `PATCH` helper `updatePetPhoto` in `app/lib/pet-photos.ts`.

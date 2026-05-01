@@ -1,12 +1,19 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getShanghaiDateKey, insertPetPhoto, isSupabaseConfigured } from "./lib/pet-photos";
+import {
+  getShanghaiDateKey,
+  insertPetPhoto,
+  isSupabaseConfigured,
+  updatePetPhoto,
+} from "./lib/pet-photos";
 
 export type UploadState = {
   status: "idle" | "success" | "error";
   message: string;
 };
+
+export type EditPhotoState = UploadState;
 
 const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
 
@@ -72,4 +79,47 @@ export async function uploadPetPhoto(
   revalidatePath("/");
 
   return { status: "success", message: "已记录一条新的猫咪日常。" };
+}
+
+export async function editPetPhoto(
+  _previousState: EditPhotoState,
+  formData: FormData
+): Promise<EditPhotoState> {
+  if (!isSupabaseConfigured) {
+    return {
+      status: "error",
+      message:
+        "还没有配置 Supabase 环境变量。请先设置 NEXT_PUBLIC_SUPABASE_URL 和 SUPABASE_SERVICE_ROLE_KEY。",
+    };
+  }
+
+  const id = readTextField(formData, "id");
+  const title = readTextField(formData, "title");
+  const note = readTextField(formData, "note");
+
+  if (!id) {
+    return { status: "error", message: "没有找到要编辑的照片记录。" };
+  }
+
+  if (!title) {
+    return { status: "error", message: "标题不能为空，给福仔这一刻留个名字吧。" };
+  }
+
+  try {
+    await updatePetPhoto(id, {
+      title,
+      note: note || null,
+    });
+  } catch (error) {
+    console.error("Failed to edit pet photo:", error);
+    return {
+      status: "error",
+      message: "照片记录没有更新成功，请检查 Supabase key 是否有服务端写入权限。",
+    };
+  }
+
+  revalidatePath("/");
+  revalidatePath(`/photos/${id}`);
+
+  return { status: "success", message: "已更新这张照片的记录。" };
 }
