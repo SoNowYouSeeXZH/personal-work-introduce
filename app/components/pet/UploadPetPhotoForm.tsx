@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import Image from "next/image";
+import { useActionState, useEffect, useState, type ChangeEvent } from "react";
 import { uploadPetPhoto, type UploadState } from "@/app/actions";
 
 const initialState: UploadState = {
@@ -11,6 +12,25 @@ const initialState: UploadState = {
 export function UploadPetPhotoForm() {
   const [state, formAction, pending] = useActionState(uploadPetPhoto, initialState);
   const [fileName, setFileName] = useState("");
+  const [previewUrl, setPreviewUrl] = useState("");
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
+  function handlePhotoChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.currentTarget.files?.[0];
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+
+    setFileName(file?.name ?? "");
+    setPreviewUrl(file ? URL.createObjectURL(file) : "");
+  }
 
   return (
     <form
@@ -48,7 +68,22 @@ export function UploadPetPhotoForm() {
 
       <div className="grid gap-2 text-sm font-semibold text-slate-700 md:col-span-2">
         <label htmlFor="pet-photo-upload">上传图片</label>
-        <div className="xhs-upload-drop relative overflow-hidden rounded-md border border-dashed p-4 transition focus-within:border-[#E8655A] focus-within:ring-4 focus-within:ring-[#F8D5C4]/60">
+        <div className="xhs-upload-drop relative grid gap-4 overflow-hidden rounded-md border border-dashed p-4 transition focus-within:border-[#E8655A] focus-within:ring-4 focus-within:ring-[#F8D5C4]/60 sm:grid-cols-[132px_1fr] sm:items-center">
+          <div className="relative aspect-square overflow-hidden rounded-md border border-white/80 bg-white/70 shadow-[4px_4px_0_rgba(248,213,196,0.65)]">
+            {previewUrl ? (
+              <Image
+                src={previewUrl}
+                alt="待上传图片预览"
+                fill
+                unoptimized
+                className="object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,rgba(248,213,196,0.62),rgba(181,229,207,0.45))] px-4 text-center text-xs font-black leading-5 text-slate-500">
+                图片预览
+              </div>
+            )}
+          </div>
           <input
             id="pet-photo-upload"
             required
@@ -57,9 +92,9 @@ export function UploadPetPhotoForm() {
             accept="image/*"
             className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
             aria-describedby="pet-photo-upload-hint"
-            onChange={(event) => setFileName(event.currentTarget.files?.[0]?.name ?? "")}
+            onChange={handlePhotoChange}
           />
-          <div className="pointer-events-none flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="pointer-events-none flex flex-col gap-2 sm:items-start">
             <span className="xhs-button inline-flex h-10 w-fit items-center rounded-md px-4 text-sm font-bold text-white">
               选择相册图片
             </span>
