@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { uploadPetPhoto, type UploadState } from "@/app/actions";
 
 const initialState: UploadState = {
@@ -10,6 +10,7 @@ const initialState: UploadState = {
 
 export function UploadPetPhotoForm() {
   const [state, formAction, pending] = useActionState(uploadPetPhoto, initialState);
+  const [fileName, setFileName] = useState("");
 
   return (
     <form
@@ -46,16 +47,29 @@ export function UploadPetPhotoForm() {
         />
       </label>
 
-      <label className="grid gap-2 text-sm font-semibold text-slate-700 md:col-span-2">
-        上传图片
-        <input
-          required
-          name="photo"
-          type="file"
-          accept="image/*"
-          className="rounded-md border border-dashed border-rose-200 bg-rose-50/70 px-3 py-3 text-sm text-slate-600 file:mr-4 file:rounded-md file:border-0 file:bg-rose-500 file:px-4 file:py-2 file:text-sm file:font-bold file:text-white hover:file:bg-rose-600"
-        />
-      </label>
+      <div className="grid gap-2 text-sm font-semibold text-slate-700 md:col-span-2">
+        <label htmlFor="pet-photo-upload">上传图片</label>
+        <div className="relative overflow-hidden rounded-md border border-dashed border-rose-200 bg-rose-50/70 p-4 transition focus-within:border-rose-300 focus-within:ring-4 focus-within:ring-rose-100">
+          <input
+            id="pet-photo-upload"
+            required
+            name="photo"
+            type="file"
+            accept="image/*"
+            className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
+            aria-describedby="pet-photo-upload-hint"
+            onChange={(event) => setFileName(event.currentTarget.files?.[0]?.name ?? "")}
+          />
+          <div className="pointer-events-none flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <span className="inline-flex h-10 w-fit items-center rounded-md bg-rose-500 px-4 text-sm font-bold text-white">
+              选择相册图片
+            </span>
+            <span id="pet-photo-upload-hint" className="text-sm font-medium text-slate-500">
+              {fileName || "点这里打开手机相册"}
+            </span>
+          </div>
+        </div>
+      </div>
 
       <div className="flex flex-col gap-3 md:col-span-2 md:flex-row md:items-center md:justify-between">
         <p
@@ -71,6 +85,7 @@ export function UploadPetPhotoForm() {
           {state.message || "支持 JPG、PNG、WebP、GIF，单张不超过 4MB。"}
         </p>
         <button
+          type="submit"
           disabled={pending}
           className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-slate-900 px-5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-rose-600 disabled:cursor-not-allowed disabled:opacity-60"
         >
