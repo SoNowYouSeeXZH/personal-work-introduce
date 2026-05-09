@@ -2,10 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import {
+  deletePetPhoto,
   getShanghaiDateKey,
   insertPetPhoto,
   isSupabaseConfigured,
   updatePetPhoto,
+  uploadPetPhotoToStorage,
 } from "./lib/pet-photos";
 
 export type UploadState = {
@@ -15,7 +17,9 @@ export type UploadState = {
 
 export type EditPhotoState = UploadState;
 
-const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
+export type DeletePhotoState = UploadState;
+
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
 
 function readTextField(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -52,12 +56,25 @@ export async function uploadPetPhoto(
   }
 
   if (file.size > MAX_IMAGE_SIZE) {
-    return { status: "error", message: "图片不能超过 4MB，稍微压缩一下再上传。" };
+    return { status: "error", message: "图片不能超过 10MB，稍微压缩一下再上传。" };
   }
 
-  const bytes = Buffer.from(await file.arrayBuffer());
-  const imageUrl = `data:${file.type};base64,${bytes.toString("base64")}`;
   const uploadedAt = new Date();
+  let imageUrl: string;
+
+  try {
+    const bytes = Buffer.from(await file.arrayBuffer());
+    const extFromType = file.type.split("/")[1] ?? "jpg";
+    const extFromName = file.name.split(".").pop();
+    const fileExt = (extFromName && extFromName.length <= 5 ? extFromName : extFromType) ?? "jpg";
+    imageUrl = await uploadPetPhotoToStorage(bytes, file.type, fileExt);
+  } catch (error) {
+    console.error("Failed to upload pet photo to storage:", error);
+    return {
+      status: "error",
+      message: "图片没有上传成功，请检查 Supabase Storage 权限。",
+    };
+  }
 
   try {
     await insertPetPhoto({
@@ -122,4 +139,38 @@ export async function editPetPhoto(
   revalidatePath(`/photos/${id}`);
 
   return { status: "success", message: "已更新这张照片的记录。" };
+}
+
+export async function deletePetPhotoRecord(
+  _previousState: DeletePhotoState,
+  formData: FormData
+): Promise<DeletePhotoState> {
+  if (!isSupabaseConfigured) {
+    return {
+      status: "error",
+      message:
+        "还没有配置 Supabase 环境变量。请先设置 NEXT_PUBLIC_SUPABASE_URL 和 SUPABASE_SERVICE_ROLE_KEY。",
+    };
+  }
+
+  const id = readTextField(formData, "id");
+
+  if (!id) {
+    return { status: "error", message: "没有找到要删除的照片记录。" };
+  }
+
+  try {
+    await deletePetPhoto(id);
+  } catch (error) {
+    console.error("Failed to delete pet photo:", error);
+    return {
+      status: "error",
+      message: "照片记录没有删除成功，请检查 Supabase key 是否有服务端删除权限。",
+    };
+  }
+
+  revalidatePath("/");
+  revalidatePath(`/photos/${id}`);
+
+  return { status: "success", message: "已删除这条照片记录。" };
 }

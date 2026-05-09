@@ -116,7 +116,7 @@ export function UploadPetPhotoForm() {
                 : "text-slate-500"
           }`}
         >
-          {state.message || "支持常见图片格式，单张不超过 4MB。"}
+          {state.message || "支持常见图片格式，单张不超过 10MB。"}
         </p>
         <button
           type="submit"

@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import BounceCards from "./components/bits/BounceCards";
+import LanyardFixed from "./components/bits/LanyardFixed";
 import { UploadPetPhotoForm } from "./components/pet/UploadPetPhotoForm";
 import {
   formatDateLabel,
@@ -10,7 +12,7 @@ import {
   type PetPhoto,
 } from "./lib/pet-photos";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 30;
 
 function PhotoTile({ photo, priority }: { photo: PetPhoto; priority?: boolean }) {
   return (
@@ -80,9 +82,18 @@ export default async function Home() {
   const groupedPhotos = groupPhotosByUploadDay(photos);
   const totalDays = groupedPhotos.length;
   const latestPhoto = photos[0];
+  const bounceImages = photos.slice(0, 5).map((p) => p.image_url);
+  const bounceTransforms = [
+    "rotate(5deg) translate(-150px)",
+    "rotate(0deg) translate(-70px)",
+    "rotate(-5deg)",
+    "rotate(5deg) translate(70px)",
+    "rotate(-5deg) translate(150px)",
+  ];
 
   return (
     <div className="xhs-shell min-h-screen text-slate-900">
+      {latestPhoto ? <LanyardFixed /> : null}
       <section className="xhs-hero border-b border-[#F8D5C4] px-5 pb-12 pt-28 md:px-8">
         <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-end">
           <div>
@@ -110,7 +121,7 @@ export default async function Home() {
                 <p className="mt-1 text-xs font-bold text-slate-500">个日期</p>
               </div>
               <div className="xhs-stat-card bg-[#B5E5CF]/55">
-                <p className="text-2xl font-black text-slate-950">4MB</p>
+                <p className="text-2xl font-black text-slate-950">10MB</p>
                 <p className="mt-1 text-xs font-bold text-slate-500">单图上限</p>
               </div>
             </div>
@@ -181,6 +192,22 @@ export default async function Home() {
 
       <section id="gallery" className="border-t border-[#F8D5C4] bg-white/70 px-5 py-12 md:px-8">
         <div className="mx-auto max-w-6xl">
+          {bounceImages.length > 0 ? (
+            <div className="mb-10 flex flex-col items-center gap-3">
+              <p className="xhs-section-label">最近的小瞬间</p>
+              <BounceCards
+                images={bounceImages}
+                containerWidth={500}
+                containerHeight={250}
+                animationDelay={0.4}
+                animationStagger={0.08}
+                easeType="elastic.out(1, 0.5)"
+                transformStyles={bounceTransforms}
+                enableHover
+              />
+            </div>
+          ) : null}
+
           <div className="mb-8 flex flex-col justify-between gap-3 md:flex-row md:items-end">
             <div>
               <p className="xhs-section-label">时间线</p>

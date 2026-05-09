@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { DeletePetPhotoForm } from "@/app/components/pet/DeletePetPhotoForm";
 import { EditPetPhotoForm } from "@/app/components/pet/EditPetPhotoForm";
 import { formatDateTimeLabel, getPetPhoto } from "@/app/lib/pet-photos";
 
@@ -67,6 +68,7 @@ export default async function PhotoPage({
           </div>
 
           <EditPetPhotoForm id={photo.id} title={photo.title} note={photo.note} />
+          <DeletePetPhotoForm id={photo.id} title={photo.title} />
         </article>
       </div>
     </div>

@@ -59,9 +59,17 @@ async function supabaseRequest<T>(path: string, init?: RequestInit): Promise<T> 
     throw new Error("Supabase environment variables are not configured.");
   }
 
+  const method = (init?.method ?? "GET").toUpperCase();
+  const isRead = method === "GET";
+
   const response = await fetch(`${supabaseUrl}${path}`, {
     ...init,
-    cache: "no-store",
+    // Allow ISR/data-cache for reads so the homepage can be statically cached
+    // and refreshed via `revalidatePath` from server actions. Writes always
+    // bypass cache.
+    ...(isRead
+      ? { next: { revalidate: 30, tags: ["pet_photos"] } }
+      : { cache: "no-store" as const }),
     headers: {
       apikey: supabaseKey,
       Authorization: `Bearer ${supabaseKey}`,
@@ -111,6 +119,42 @@ export async function getPetPhoto(id: string): Promise<PetPhoto | null> {
   }
 }
 
+const PET_PHOTOS_BUCKET = "pet-photos";
+
+export async function uploadPetPhotoToStorage(
+  bytes: Buffer | Uint8Array,
+  contentType: string,
+  fileExt: string
+): Promise<string> {
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Supabase environment variables are not configured.");
+  }
+
+  const safeExt = fileExt.replace(/[^a-z0-9]/gi, "").toLowerCase() || "jpg";
+  const fileName = `${crypto.randomUUID()}.${safeExt}`;
+  const uploadUrl = `${supabaseUrl}/storage/v1/object/${PET_PHOTOS_BUCKET}/${fileName}`;
+
+  const response = await fetch(uploadUrl, {
+    method: "POST",
+    cache: "no-store",
+    headers: {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+      "Content-Type": contentType,
+      "Cache-Control": "public, max-age=31536000, immutable",
+      "x-upsert": "false",
+    },
+    body: new Uint8Array(bytes),
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(message || `Supabase Storage upload failed with ${response.status}.`);
+  }
+
+  return `${supabaseUrl}/storage/v1/object/public/${PET_PHOTOS_BUCKET}/${fileName}`;
+}
+
 export async function insertPetPhoto(photo: NewPetPhoto): Promise<PetPhoto> {
   const rows = await supabaseRequest<PetPhoto[]>("/rest/v1/pet_photos", {
     method: "POST",
@@ -141,6 +185,24 @@ export async function updatePetPhoto(id: string, updates: PetPhotoUpdates): Prom
 
   if (!rows[0]) {
     throw new Error("Supabase did not return the updated photo.");
+  }
+
+  return rows[0];
+}
+
+export async function deletePetPhoto(id: string): Promise<PetPhoto> {
+  const rows = await supabaseRequest<PetPhoto[]>(
+    `/rest/v1/pet_photos?id=eq.${encodeURIComponent(id)}`,
+    {
+      method: "DELETE",
+      headers: {
+        Prefer: "return=representation",
+      },
+    }
+  );
+
+  if (!rows[0]) {
+    throw new Error("Supabase did not return the deleted photo.");
   }
 
   return rows[0];
