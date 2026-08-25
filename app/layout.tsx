@@ -3,8 +3,8 @@ import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "福仔日常相册",
-  description: "一个用于记录福仔日常照片，并按上传日期分类展示的清新个人网站。",
+  title: "福仔知识日记",
+  description: "记录福仔的日常，也记录学习中的新发现、实践和思考。",
 };
 
 function Navbar() {
@@ -24,6 +24,12 @@ function Navbar() {
             className="hidden rounded-md px-3 py-2 text-sm font-bold text-slate-600 transition hover:bg-[#B5E5CF]/45 hover:text-emerald-800 sm:inline-flex"
           >
             相册
+          </Link>
+          <Link
+            href="/notes"
+            className="hidden rounded-md px-3 py-2 text-sm font-bold text-slate-600 transition hover:bg-[#A8D8EA]/45 hover:text-sky-900 sm:inline-flex"
+          >
+            知识日记
           </Link>
           <Link
             href="/#upload"

@@ -453,6 +453,138 @@ textarea {
   scrollbar-color: rgba(232, 101, 90, 0.42) rgba(245, 240, 232, 0.9);
 }
 
+.notes-hero {
+  background: linear-gradient(135deg, rgba(168, 216, 234, 0.48), rgba(255, 250, 240, 0.82) 58%, rgba(181, 229, 207, 0.48));
+}
+
+.note-card {
+  display: block;
+  border: 1px solid rgba(44, 62, 80, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 250, 240, 0.9);
+  padding: 1.25rem;
+  box-shadow: 0 12px 32px rgba(44, 62, 80, 0.07);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.note-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px rgba(44, 62, 80, 0.12);
+}
+
+.note-tag {
+  border-radius: 999px;
+  background: rgba(213, 198, 224, 0.58);
+  color: #4c4358;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.note-back-link {
+  display: inline-flex;
+  color: #c84f51;
+  font-size: 0.9rem;
+  font-weight: 800;
+  transition: transform 180ms ease;
+}
+
+.note-back-link:hover {
+  transform: translateX(-3px);
+}
+
+.note-article-header {
+  border-bottom: 1px solid rgba(183, 220, 235, 0.9);
+  padding-bottom: 2.5rem;
+}
+
+.note-article-body {
+  min-width: 0;
+  border-radius: 8px;
+  background: rgba(255, 250, 240, 0.78);
+  padding: clamp(1.25rem, 4vw, 3rem);
+}
+
+.note-article-body section + section {
+  margin-top: 3.5rem;
+  padding-top: 3.5rem;
+  border-top: 1px dashed rgba(44, 62, 80, 0.16);
+}
+
+.note-article-body h2 {
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  font-weight: 900;
+  line-height: 1.2;
+  color: #0f172a;
+}
+
+.note-section-number {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: rgba(168, 216, 234, 0.65);
+  color: #164e63;
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.note-article-body p {
+  color: #475569;
+  font-size: 1rem;
+  line-height: 2;
+}
+
+.note-article-body p + p {
+  margin-top: 1rem;
+}
+
+.note-article-body pre {
+  overflow-x: auto;
+  margin-top: 1.5rem;
+  border-radius: 6px;
+  background: #24313f;
+  padding: 1rem 1.1rem;
+  color: #e7f4f6;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.8;
+  white-space: pre;
+}
+
+.note-outline {
+  border-left: 2px solid rgba(168, 216, 234, 0.8);
+  padding-left: 1rem;
+}
+
+.note-outline a {
+  color: #64748b;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.4;
+  transition: color 180ms ease;
+}
+
+.note-outline a:hover {
+  color: #c84f51;
+}
+
+@media (max-width: 1023px) {
+  .note-outline {
+    border-left: 0;
+    border-top: 1px solid rgba(168, 216, 234, 0.8);
+    padding-left: 0;
+    padding-top: 1.25rem;
+  }
+
+  .note-outline nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
